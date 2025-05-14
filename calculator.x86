@@ -1,8 +1,8 @@
 *-----------------------------------------------------------
-* Title      : Calculator
-* Written by : Aqil Yusri
-* Date       : 14/5/2025
-* Description: Calculator that can do basic arithmetic and logical operations
+* Title      :
+* Written by :
+* Date       :
+* Description:
 *-----------------------------------------------------------
     ORG    $1000
 START:                  ; first instruction of program
@@ -24,6 +24,12 @@ LOGIC_LOOP:
         BSR INNUM
         CMP.L #1, D1
         BEQ AND
+        CMP.L #2, D1
+        BEQ OR
+        CMP.L #3, D1
+        BEQ NOT
+        CMP.L #4, D1
+        BEQ XOR
         BRA LOGIC_LOOP
         
 MATH_LOOP:
@@ -137,6 +143,66 @@ AND:
     BSR OUTSTRING
     BSR OUTNUMBIN
     BSR TRIM
+    LEA BUFFIER, A1
+    BSR OUTSTRING
+    LEA REPEAT, A1
+    BSR OUTSTRING
+    BRA MAIN_LOOP
+    
+OR:
+    LEA BIN_PROMPT1, A1
+    BSR OUTSTRING
+    BSR INNUMBIN
+    BSR CHECKBIN
+    MOVE.L D1, D4
+    LEA BIN_PROMPT2, A1
+    BSR OUTSTRING
+    BSR INNUMBIN
+    BSR CHECKBIN
+    MOVE.L D1, D5
+    MOVE.L D4, D6
+    OR D5, D6
+    LEA RESULT, A1
+    BSR OUTSTRING
+    BSR OUTNUMBIN
+    LEA BUFFIER, A1
+    BSR OUTSTRING
+    LEA REPEAT, A1
+    BSR OUTSTRING
+    BRA MAIN_LOOP
+    
+NOT: ; Check what's wrong with NOT     LEA BIN_PROMPT1, A1
+    BSR OUTSTRING
+    BSR INNUMBIN
+    BSR CHECKBIN
+    MOVE.L D1, D4
+    MOVE.L D4, D5
+    NOT D5
+    LEA RESULT, A1
+    BSR OUTSTRING
+    BSR OUTNUMBIN
+    LEA BUFFIER, A1
+    BSR OUTSTRING
+    LEA REPEAT, A1
+    BSR OUTSTRING
+    BRA MAIN_LOOP
+    
+XOR:
+    LEA BIN_PROMPT1, A1
+    BSR OUTSTRING
+    BSR INNUMBIN
+    BSR CHECKBIN
+    MOVE.L D1, D4
+    LEA BIN_PROMPT2, A1
+    BSR OUTSTRING
+    BSR INNUMBIN
+    BSR CHECKBIN
+    MOVE.L D1, D5
+    MOVE.L D4, D6
+    EOR D5, D6
+    LEA RESULT, A1
+    BSR OUTSTRING
+    BSR OUTNUMBIN
     LEA BUFFIER, A1
     BSR OUTSTRING
     LEA REPEAT, A1

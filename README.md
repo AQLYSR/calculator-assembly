@@ -7,10 +7,10 @@ This is a basic calculator that is written using assembly programming and is run
 - Do logical (AND, OR, NOT, XOR) and arithmetics (addition, subtraction, multiplication, division) operations.
 - Handles signed numbers
 - Gives quotient and remainder for division operation
-- Logical operations automatically convert user input to binary or hexadecimal
+- Logical operations automatically only accept binary numbers
 
 ## Progress
 
-:white_check_mark: addition, subtraction, multiplication, division, AND
+:white_check_mark: addition, subtraction, multiplication, division, AND, OR, XOR
 
-:x: OR, NOT, XOR, trim binary output
+:x: NOT, trim binary output
