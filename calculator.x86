@@ -1,0 +1,178 @@
+    ORG    $1000
+START:                  ; first instruction of program
+MAIN_LOOP:
+        LEA ASK, A1
+        BSR OUTSTRING
+        BSR INNUM
+        CMP.L #0, D1
+        BEQ EXIT
+        CMP.L #1, D1
+        BEQ MATH_LOOP
+        CMP.L #2, D2
+        BEQ LOGIC_LOOP
+        BRA MAIN_LOOP
+        
+LOGIC_LOOP:
+        LEA LOGIC_MENU, A1
+        BSR OUTSTRING
+        BSR INNUM
+        CMP.L #1, D1
+        BEQ AND
+        CMP.L #2, D1
+        BEQ OR
+        CMP.L #3, D1
+        BEQ NOT
+        CMP.L #4, D1
+        BEQ XOR
+        BRA LOGIC_LOOP
+        
+MATH_LOOP:
+        LEA MATH_MENU, A1
+        BSR OUTSTRING
+        BSR INNUM
+        CMP.L #1, D1
+        BEQ ADDITION
+        CMP.L #2, D1
+        BEQ SUBTRACTION
+        CMP.L #3, D1
+        BEQ MULTIPLICATION
+        CMP.L #4, D1
+        BEQ DIVISION
+        BRA MATH_LOOP
+        
+ADDITION:
+        LEA PROMPT1, A1
+        BSR OUTSTRING
+        BSR INNUM
+        MOVE.L D1, D2
+        LEA PROMPT2, A1
+        BSR OUTSTRING
+        BSR INNUM 
+        MOVE.L D1, D3
+        BSR ADD_NUMS
+        LEA RESULT, A1
+        BSR OUTSTRING
+        BSR OUTNUM
+        LEA REPEAT, A1
+        BSR OUTSTRING
+        BRA MAIN_LOOP
+        
+SUBTRACTION:
+        LEA PROMPT1, A1
+        BSR OUTSTRING
+        BSR INNUM
+        MOVE.L D1, D2
+        LEA PROMPT2, A1
+        BSR OUTSTRING
+        BSR INNUM
+        MOVE.L D1, D3
+        BSR SUB_NUMS
+        LEA RESULT, A1
+        BSR OUTSTRING
+        BSR OUTNUM
+        LEA REPEAT, A1
+        BSR OUTSTRING
+        BRA MAIN_LOOP
+        
+MULTIPLICATION:
+        LEA PROMPT1, A1
+        BSR OUTSTRING
+        BSR INNUM
+        MOVE.L D1, D2
+        LEA PROMPT2, A1
+        BSR OUTSTRING
+        BSR INNUM
+        MOVE.L D1, D3
+        BSR MUL_NUMS
+        LEA RESULT, A1
+        BSR OUTSTRING
+        BSR OUTNUM
+        LEA REPEAT, A1
+        BSR OUTSTRING
+        BRA MAIN_LOOP
+        
+DIVISION:
+        LEA PROMPT1, A1
+        BSR OUTSTRING
+        BSR INNUM
+        MOVE.L D1, D2
+        LEA PROMPT2, A1
+        BSR OUTSTRING
+        BSR INNUM
+        MOVE.L D1, D3
+        BSR DIV_NUMS
+        LEA QUO, A1
+        BSR OUTSTRING
+        MOVE.L D4, D1
+        MOVE.W D1, D1
+        EXT.L D1
+        MOVE.W #3, D0
+        TRAP #15
+        LEA REM, A1
+        BSR OUTSTRING
+        MOVE.L D4, D1
+        SWAP D1
+        MOVE.W D1, D1
+        EXT.L D1
+        MOVE.B #3, D0
+        TRAP #15
+        LEA REPEAT, A1
+        BSR OUTSTRING
+        BRA MAIN_LOOP
+        
+AND:
+        LEA PROMPT11,A1
+
+EXIT:
+    SIMHALT             ; halt simulator
+
+OUTSTRING:
+    MOVE.B #14, D0
+    TRAP #15
+    RTS
+    
+INNUM:
+    MOVE.B #4, D0
+    TRAP #15
+    RTS
+    
+OUTNUM:
+    MOVE.L D4, D1
+    MOVE.B #3, D0
+    TRAP #15
+    RTS
+    
+ADD_NUMS:
+    MOVE.L D2, D4
+    ADD.L D3, D4
+    RTS
+   
+SUB_NUMS:
+    MOVE.L D2, D4
+    SUB.L D3, D4
+    RTS
+    
+MUL_NUMS:
+    MOVE.L D2, D4
+    MULS D3,D4
+    RTS
+    
+DIV_NUMS:
+    MOVE.L D2, D4
+    DIVS D3, D4
+    RTS
+    
+    
+ASK DC.B 'Enter 1 for arithmetic operation, 2 for logical operation, 0 to quit: ', 0
+MATH_MENU DC.B 'Enter 1 for addition, 2 for subtraction, 3 for multiplication, 4 for division: ', 0
+LOGIC_MENU DC.B 'Enter 1 for AND, 2 for OR, 3 for NOT, 4 for XOR: ', 0
+PROMPT1 DC.B 'Enter the first number: ', 0
+PROMPT2 DC.B  'Enter the second number: ', 0
+REPEAT DC.B 13, 10, 13, 10, 0
+RESULT DC.B 'The result is: ', 0
+QUO DC.B 'Quotient: ', 0 
+REM DC.B ' Remainder: ', 0
+PROMPT11 DC.B 'Enter the first number (binary or hexadecimal): '0
+
+    END    START        ; last line of source
+
