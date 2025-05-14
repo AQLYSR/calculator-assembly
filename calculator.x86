@@ -142,7 +142,6 @@ AND:
     LEA RESULT, A1
     BSR OUTSTRING
     BSR OUTNUMBIN
-    BSR TRIM
     LEA BUFFIER, A1
     BSR OUTSTRING
     LEA REPEAT, A1
@@ -171,13 +170,14 @@ OR:
     BSR OUTSTRING
     BRA MAIN_LOOP
     
-NOT: ; Check what's wrong with NOT     LEA BIN_PROMPT1, A1
+NOT: 
+    LEA BIN_PROMPT1, A1
     BSR OUTSTRING
     BSR INNUMBIN
     BSR CHECKBIN
     MOVE.L D1, D4
-    MOVE.L D4, D5
-    NOT D5
+    MOVE.L D4, D6
+    NOT D6
     LEA RESULT, A1
     BSR OUTSTRING
     BSR OUTNUMBIN
@@ -304,10 +304,6 @@ SHIFT:
     BLT DECTOBIN
     MOVE.B #0, (A0)
     RTS
-
-TRIM:
-
-    
     
 ASK DC.B 'Enter 1 for arithmetic operation, 2 for logical operation, 0 to quit: ', 0
 MATH_MENU DC.B 'Enter 1 for addition, 2 for subtraction, 3 for multiplication, 4 for division: ', 0
@@ -329,6 +325,11 @@ BUFFER DS.B 32
 BUFFIER DS.B 32
 
     END    START        ; last line of source
+
+
+
+
+
 
 
 

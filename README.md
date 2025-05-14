@@ -11,6 +11,6 @@ This is a basic calculator that is written using assembly programming and is run
 
 ## Progress
 
-:white_check_mark: addition, subtraction, multiplication, division, AND, OR, XOR
+:white_check_mark: addition, subtraction, multiplication, division, AND, OR, XOR, NOT
 
-:x: NOT, trim binary output
+:x: trim binary output
