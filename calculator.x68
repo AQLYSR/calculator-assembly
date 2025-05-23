@@ -1,8 +1,8 @@
 *-----------------------------------------------------------
-* Title      :
-* Written by :
-* Date       :
-* Description:
+* Title      : CALCULATOR
+* Written by : Muhammad Aqil Bin Mohd Yusri
+* Date       : 23/5/2025
+* Description: Calculator that run basic arithmetic and logical operations
 *-----------------------------------------------------------
     ORG    $1000
 START:                  ; first instruction of program
@@ -142,8 +142,6 @@ AND:
     LEA RESULT, A1
     BSR OUTSTRING
     BSR OUTNUMBIN
-    LEA BUFFIER, A1
-    BSR OUTSTRING
     LEA REPEAT, A1
     BSR OUTSTRING
     BRA MAIN_LOOP
@@ -164,8 +162,6 @@ OR:
     LEA RESULT, A1
     BSR OUTSTRING
     BSR OUTNUMBIN
-    LEA BUFFIER, A1
-    BSR OUTSTRING
     LEA REPEAT, A1
     BSR OUTSTRING
     BRA MAIN_LOOP
@@ -203,8 +199,6 @@ XOR:
     LEA RESULT, A1
     BSR OUTSTRING
     BSR OUTNUMBIN
-    LEA BUFFIER, A1
-    BSR OUTSTRING
     LEA REPEAT, A1
     BSR OUTSTRING
     BRA MAIN_LOOP
@@ -303,7 +297,39 @@ SHIFT:
     CMP.L #32, D2
     BLT DECTOBIN
     MOVE.B #0, (A0)
+    
+    LEA BUFFIER, A0
+    
+TRIM:
+    MOVE.B (A0), D0
+    CMP.B #0, D0
+    BEQ DONE_ZERO
+    CMP.B #'1', D0
+    BEQ IS_ONE
+    ADDQ.L #1, A0
+    BRA TRIM
+    
+IS_ONE:
+    MOVE.B (A0)+, D0
+    MOVE.B D0, (A1)+
+    CMP.B #0, D0
+    BEQ DONE
+    BRA IS_ONE
+    
+DONE:
+    MOVEA.L A1, A2
+    LEA RESULT, A1
+    BSR OUTSTRING
+    MOVEA.L A2, A1
+    LEA TRIMMED, A1
+    BSR OUTSTRING
     RTS
+    
+DONE_ZERO
+    LEA ZERO, A1
+    BSR OUTSTRING
+    RTS
+    
     
 ASK DC.B 'Enter 1 for arithmetic operation, 2 for logical operation, 0 to quit: ', 0
 MATH_MENU DC.B 'Enter 1 for addition, 2 for subtraction, 3 for multiplication, 4 for division: ', 0
@@ -317,20 +343,14 @@ REM DC.B ' Remainder: ', 0
 BIN_PROMPT1 DC.B 'Enter the first binary number: ', 0
 BIN_PROMPT2 DC.B 'Enter the second binary number: ', 0
 INVALID_BIT DC.B 'Invalid binary number! Try again. ', 10, 0
+ZERO DC.B '0', 0
 
     ORG $2000
 BUFFER DS.B 32
 
     ORG $2050
 BUFFIER DS.B 32
+TRIMMED DS.B 33
 
     END    START        ; last line of source
-
-
-
-
-
-
-
-
 
