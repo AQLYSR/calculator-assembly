@@ -263,7 +263,7 @@ CHECKBIN:
     
     LEA INVALID_BIT, A1
     BSR OUTSTRING
-    BRA INNUMBIN
+    BRA MAIN_LOOP
     
 VALID_BIT:
     LSL.L #1, D1
@@ -342,7 +342,7 @@ QUO DC.B 'Quotient: ', 0
 REM DC.B ' Remainder: ', 0
 BIN_PROMPT1 DC.B 'Enter the first binary number: ', 0
 BIN_PROMPT2 DC.B 'Enter the second binary number: ', 0
-INVALID_BIT DC.B 'Invalid binary number! Try again. ', 10, 0
+INVALID_BIT DC.B 'Invalid binary number! Try again. ',13, 10, 13, 10, 0
 ZERO DC.B '0', 0
 
     ORG $2000
