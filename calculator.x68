@@ -176,9 +176,7 @@ NOT:
     NOT D6
     LEA RESULT, A1
     BSR OUTSTRING
-    BSR OUTNUMBIN
-    LEA BUFFIER, A1
-    BSR OUTSTRING
+    BSR OUTNUMBINNOT
     LEA REPEAT, A1
     BSR OUTSTRING
     BRA MAIN_LOOP
@@ -329,6 +327,62 @@ DONE_ZERO
     BSR OUTSTRING
     RTS
     
+OUTNUMBINNOT:
+     LEA BUFFIER, A0
+    MOVE.L D6, D3
+    MOVE.L #0, D2
+
+DECTOBINNOT:
+    BTST #31, D3
+    BEQ ADD_ZERONOT
+    MOVE.B #'1', (A0)+
+    BRA SHIFTNOT
+    
+ADD_ZERONOT:
+    MOVE.B #'0', (A0)+
+    
+SHIFTNOT:
+    LSL.L #1, D3
+    ADDI.L #1, D2
+    CMP.L #32, D2
+    BLT DECTOBINNOT
+    MOVE.B #0, (A0)
+    
+    LEA BUFFIER, A0
+    MOVEA.L A0, A1
+    
+TRIM_ZERO:
+    MOVE.B (A1), D0
+    CMP.B #0, D0
+    BEQ DONE_ZERO
+    CMP.B #'1', D0
+    BEQ TRIM_ONE
+    ADDQ.L #1, A1
+    BRA TRIM_ZERO
+    
+TRIM_ONE:
+    MOVE.B (A1), D0
+    CMP.B #0, D0
+    BEQ DONE_ZERO
+    CMP.B #'0', D0
+    BEQ IS_ZERO
+    ADDQ.L #1, A1
+    BRA TRIM_ONE
+    
+IS_ZERO:
+    LEA TRIMMED, A2
+COPY_LOOPNOT:
+    MOVE.B (A1)+, D0
+    MOVE.B D0, (A2)+
+    CMP.B #0, D0
+    BEQ DONENOT
+    BRA COPY_LOOP
+    
+DONENOT:
+    LEA TRIMMED, A1
+    BSR OUTSTRING
+    RTS
+
     
 ASK DC.B 'Enter 1 for arithmetic operation, 2 for logical operation, 0 to quit: ', 0
 MATH_MENU DC.B 'Enter 1 for addition, 2 for subtraction, 3 for multiplication, 4 for division: ', 0
