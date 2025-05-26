@@ -299,28 +299,27 @@ SHIFT:
     MOVE.B #0, (A0)
     
     LEA BUFFIER, A0
+    MOVEA.L A0, A1
     
 TRIM:
-    MOVE.B (A0), D0
+    MOVE.B (A1), D0
     CMP.B #0, D0
     BEQ DONE_ZERO
     CMP.B #'1', D0
     BEQ IS_ONE
-    ADDQ.L #1, A0
+    ADDQ.L #1, A1
     BRA TRIM
     
 IS_ONE:
-    MOVE.B (A0)+, D0
-    MOVE.B D0, (A1)+
+    LEA TRIMMED, A2
+COPY_LOOP:
+    MOVE.B (A1)+, D0
+    MOVE.B D0, (A2)+
     CMP.B #0, D0
     BEQ DONE
-    BRA IS_ONE
+    BRA COPY_LOOP
     
 DONE:
-    MOVEA.L A1, A2
-    LEA RESULT, A1
-    BSR OUTSTRING
-    MOVEA.L A2, A1
     LEA TRIMMED, A1
     BSR OUTSTRING
     RTS
@@ -342,7 +341,7 @@ QUO DC.B 'Quotient: ', 0
 REM DC.B ' Remainder: ', 0
 BIN_PROMPT1 DC.B 'Enter the first binary number: ', 0
 BIN_PROMPT2 DC.B 'Enter the second binary number: ', 0
-INVALID_BIT DC.B 'Invalid binary number! Try again. ',13, 10, 13, 10, 0
+INVALID_BIT DC.B 'Invalid binary number! Try again. ', 10, 0
 ZERO DC.B '0', 0
 
     ORG $2000
@@ -350,7 +349,10 @@ BUFFER DS.B 32
 
     ORG $2050
 BUFFIER DS.B 32
+
+    ORG $3000
 TRIMMED DS.B 33
 
     END    START        ; last line of source
+
 

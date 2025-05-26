@@ -15,5 +15,5 @@ This is a basic calculator that is written using assembly programming and is run
 
 ## Bugs
 
-- When doing logical operations, it successfully trims the output only at the first instance. The next instance of logical operation will also include some of unchanged numbers in the memory from the previous calculation.
+- NOT operation doesn't trim the exess '1's
 
