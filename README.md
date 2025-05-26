@@ -15,5 +15,5 @@ This is a basic calculator that is written using assembly programming and is run
 
 ## Bugs
 
-- NOT operation doesn't trim the exess '1's
+- no bug detected for now
 
